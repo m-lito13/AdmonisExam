@@ -11,6 +11,7 @@ namespace AdmonisTest
         const string inputPath = @"testData\Product.xml";
         static void Main(string[] args)
         {
+            Console.WriteLine("Started ...");
             DateTime before = DateTime.Now;
             ConvertProductsData();
             DateTime after = DateTime.Now;
