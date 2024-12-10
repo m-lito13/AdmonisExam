@@ -54,13 +54,13 @@ namespace AdmonisTest.impl
                     switch (reader.NodeType)
                     {
                         case XmlNodeType.Element:
-                            if (reader.Name == "product")
+                            if (reader.Name == XmlConstants.Product)
                             {
                                 XElement xElem = XElement.ReadFrom(reader) as XElement;
-                                bool hasVariants = xElem.Elements().Any(item => item.Name.LocalName == XmlConstants.Variations);
-                                if (hasVariants)
+                                string nameSpace = xElem.Name.NamespaceName;
+                                if (xElem.Element(XName.Get(XmlConstants.Variations, nameSpace)) != null)
                                 {
-                                    AdmonisProduct product = this.mapper.GetAdmonisProductFromXElement(xElem, optionsDetailsDict);
+                                    AdmonisProduct product = mapper.GetAdmonisProductFromXElement(xElem, optionsDetailsDict);
                                     if (product != null)
                                     {
                                         yield return product;
@@ -74,7 +74,7 @@ namespace AdmonisTest.impl
         }
 
         /// <summary>
-        /// Convert data for child items (options) 
+        /// Convert data for child items (options) - which don't have variations XML element 
         /// </summary>
         /// <param name="dataPath">path of file</param>
         /// <returns></returns>
@@ -88,11 +88,11 @@ namespace AdmonisTest.impl
                     switch (reader.NodeType)
                     {
                         case XmlNodeType.Element:
-                            if (reader.Name == "product")
+                            if (reader.Name == XmlConstants.Product)
                             {
                                 XElement xElem = XElement.ReadFrom(reader) as XElement;
-                                bool hasVariants = xElem.Elements().Any(item => item.Name.LocalName == XmlConstants.Variations);
-                                if (!hasVariants)
+                                string nameSpace = xElem.Name.NamespaceName;
+                                if (xElem.Element(XName.Get(XmlConstants.Variations, nameSpace)) == null)
                                 {
                                     AdmonisProductOption productOption = mapper.GetAdmonisProductOptionFromXElement(xElem);
                                     if (productOption != null)

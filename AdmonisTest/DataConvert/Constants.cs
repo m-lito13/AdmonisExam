@@ -14,6 +14,7 @@
         internal const string Variants = "variants";
         internal const string CustomAttributes = "custom-attributes";
         internal const string AttrinuteId = "attribute-id";
+        internal const string Product = "product";
 
 
     }

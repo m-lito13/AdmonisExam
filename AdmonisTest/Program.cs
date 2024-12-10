@@ -8,9 +8,10 @@ namespace AdmonisTest
 {
     internal class Program
     {
-        const string inputPath = @"testData\Product.xml";
+        const string inputFileName = "Product.xml";
         static void Main(string[] args)
         {
+            Console.WriteLine("Started ...");
             DateTime before = DateTime.Now;
             ConvertProductsData();
             DateTime after = DateTime.Now;
@@ -20,14 +21,15 @@ namespace AdmonisTest
 
         private static void ConvertProductsData()
         {
-            string folder = Path.Combine(AppContext.BaseDirectory, @"..\..\");
-            string dataFullPath = $"{folder}{inputPath}";
+            string folder = Path.Combine(AppContext.BaseDirectory, @".\testdata");
+            string dataFullPath = $"{folder}\\{inputFileName}";
             DataConverterCreator convertCreator = new DataConverterCreator();
             IInputDataConverter converter = convertCreator.GetDataConverter(DataFormats.XmlDataFormat);
 
             IList<AdmonisProduct> admProducts = converter.ConvertProductsData(dataFullPath);
             Console.WriteLine($"Converted {admProducts.Count} product items");
         }
+
 
     }
 }
