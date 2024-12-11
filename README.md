@@ -7,10 +7,11 @@ Application for converting products data stored in XML file into list of Admonis
 
 ## Running Locally
 
-Before running , it should be validated that  <running folder> contains 
-1.file ```AdmonisTest.exe```
+Before running , it should be validated that  <running folder> contains : 
 
-2.Subfolder named ```testData``` . This subfolder should contain file  named ```Product.xml```. 
+1. File ```AdmonisTest.exe```
+
+2. Subfolder named ```testData``` . This subfolder should contain file  named ```Product.xml```. 
 
 <running_folder> - folder from which the application will run
 In order to change input data file Product.xml should edited and replaced.
