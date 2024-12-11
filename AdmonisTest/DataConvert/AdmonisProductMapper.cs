@@ -1,4 +1,5 @@
 ﻿using AdmonisTest.Admonis;
+using AdmonisTest.LogHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,11 @@ namespace AdmonisTest
 {
     public class AdmonisProductMapper
     {
+        private readonly ILogHelper logHelper;
+        public AdmonisProductMapper(ILogHelper logHelper)
+        {
+            this.logHelper = logHelper;
+        }
         /// <summary>
         /// Convert product data with child elements(options) from XML element to AdmonisProduct class 
         /// </summary>
@@ -36,7 +42,7 @@ namespace AdmonisTest
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Cannot convert product {productMakat}");
+                logHelper.LogMessage($"Cannot convert product {productMakat}");
                 throw;
             }
 
@@ -52,21 +58,25 @@ namespace AdmonisTest
             string optionMakat = string.Empty;//Used to log makat to exception
             try
             {
-                AdmonisProductOption productOption = new AdmonisProductOption();
-                productOption.optionMakat = xElem.Attribute(XmlConstants.ProductId).Value;
-                productOption.optionSugName1 = DefaultValues.OptionSugName1Default;
-                productOption.optionSugName1Title = DefaultValues.OptionSugName1TitleDefault;
-                productOption.optionSugName2Title = DefaultValues.OptionSugName2TitleDefault;
+                optionMakat = xElem.Attribute(XmlConstants.ProductId).Value;
+                AdmonisProductOption productOption = CreateDefaultProductOption(optionMakat);
 
                 string nameSpace = xElem.Name.NamespaceName;
 
                 XElement customAttributes = xElem.Element(XName.Get(XmlConstants.CustomAttributes, nameSpace));
-                FillProductOptionFromCustomAttributes(productOption, customAttributes);
+                if (customAttributes != null)
+                {
+                    FillProductOptionFromCustomAttributes(productOption, customAttributes);
+                }
+                else
+                {
+                    logHelper.LogMessage($"Custom attributes for product option {optionMakat} not found");
+                }
                 return productOption;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Cannot convert product option {optionMakat}");
+                logHelper.LogMessage($"Cannot convert product option {optionMakat}");
                 throw;
             }
 
@@ -84,24 +94,34 @@ namespace AdmonisTest
             XElement variantsElement = xElem.Element(XName.Get(XmlConstants.Variants, nameSpace));
             foreach (XElement variantElem in variantsElement.Elements())
             {
-                AdmonisProductOption optionToAdd = GetAdmonisProductOptionFromVariant(product.Makat, variantElem, optionsDetails);
-                product.Options.Add(optionToAdd);
+                string optionId = variantElem.Attribute(XmlConstants.ProductId).Value;
+                if (optionsDetails.ContainsKey(optionId))
+                {
+                    AdmonisProductOption optionToAdd = optionsDetails[optionId];
+                    optionToAdd.ProductMakat = product.Makat;
+                    product.Options.Add(optionToAdd);
+                }
+                else
+                {
+                    logHelper.LogMessage($"Cannot find details for option {optionId}");
+                }
             }
         }
 
+
         /// <summary>
-        /// Get option data by id from variant xml element
+        /// Create AdmonisProductOption item for given optionId with default values 
         /// </summary>
-        /// <param name="prodMakat"></param>
-        /// <param name="variantElem"></param>
-        /// <param name="optionsDetails"></param>
+        /// <param name="optionId"></param>
         /// <returns></returns>
-        private AdmonisProductOption GetAdmonisProductOptionFromVariant(string prodMakat, XElement variantElem, Dictionary<string, AdmonisProductOption> optionsDetails)
+        private AdmonisProductOption CreateDefaultProductOption(string optionId)
         {
-            string optionId = variantElem.Attribute(XmlConstants.ProductId).Value;
-            AdmonisProductOption optDetails = optionsDetails[optionId];
-            optDetails.ProductMakat = prodMakat;
-            return optDetails;
+            AdmonisProductOption resultOption = new AdmonisProductOption();
+            resultOption.optionMakat = optionId;
+            resultOption.optionSugName1 = DefaultValues.OptionSugName1Default;
+            resultOption.optionSugName1Title = DefaultValues.OptionSugName1TitleDefault;
+            resultOption.optionSugName2Title = DefaultValues.OptionSugName2TitleDefault;
+            return resultOption;
         }
 
         private void FillProductOptionFromCustomAttributes(AdmonisProductOption productOption, XElement xElem)

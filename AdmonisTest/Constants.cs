@@ -31,4 +31,9 @@
         internal const string XmlDataFormat = "xml";
     }
 
+    internal static class LogTypes
+    {
+        internal const string Console = "console";
+    }
+
 }
