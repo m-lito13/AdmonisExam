@@ -84,9 +84,12 @@
     <Compile Include="DataConvert\AdmonisProductMapper.cs" />
     <Compile Include="Admonis\AdmonisClass.cs" />
     <Compile Include="DataConvert\DataConverterCreator.cs" />
-    <Compile Include="DataConvert\Constants.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="DataConvert\IInputDataConverter.cs" />
     <Compile Include="DataConvert\impl\XmlDataConverter.cs" />
+    <Compile Include="LogHelpers\LogHelperCreator.cs" />
+    <Compile Include="LogHelpers\ILogHelper.cs" />
+    <Compile Include="LogHelpers\impl\ConsoleLogHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -95,5 +98,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

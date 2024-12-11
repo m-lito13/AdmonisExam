@@ -1,33 +1,35 @@
 ﻿using AdmonisTest.Admonis;
 using AdmonisTest.DataConvert;
+using AdmonisTest.LogHelpers;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace AdmonisTest
 {
     internal class Program
     {
-        const string inputFileName = "Product.xml";
+        const string inputRelativeName = @".\testdata\Product.xml";
         static void Main(string[] args)
         {
-            Console.WriteLine("Started ...");
+            LogHelperCreator logHelperCreator = new LogHelperCreator();
+            ILogHelper logHelper = logHelperCreator.CreateLogHelper(LogTypes.Console);
+            logHelper.LogMessage("Started ...");
             DateTime before = DateTime.Now;
-            ConvertProductsData();
+            ConvertProductsData(logHelper);
             DateTime after = DateTime.Now;
             TimeSpan timeDiff = after.Subtract(before);
-            Console.WriteLine($"Run time: {timeDiff.TotalSeconds} seconds");
+            logHelper.LogMessage($"Run time: {timeDiff.TotalSeconds} seconds");
         }
 
-        private static void ConvertProductsData()
+        private static void ConvertProductsData(ILogHelper logHelper)
         {
-            string folder = Path.Combine(AppContext.BaseDirectory, @".\testdata");
-            string dataFullPath = $"{folder}\\{inputFileName}";
+            string dataFullPath = $"{AppContext.BaseDirectory}\\{inputRelativeName}";
             DataConverterCreator convertCreator = new DataConverterCreator();
-            IInputDataConverter converter = convertCreator.GetDataConverter(DataFormats.XmlDataFormat);
+
+            IInputDataConverter converter = convertCreator.GetDataConverter(DataFormats.XmlDataFormat, logHelper);
 
             IList<AdmonisProduct> admProducts = converter.ConvertProductsData(dataFullPath);
-            Console.WriteLine($"Converted {admProducts.Count} product items");
+            logHelper.LogMessage($"Converted {admProducts.Count} product items");
         }
 
 

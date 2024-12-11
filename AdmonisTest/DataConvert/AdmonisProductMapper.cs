@@ -1,4 +1,5 @@
 ﻿using AdmonisTest.Admonis;
+using AdmonisTest.LogHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,11 @@ namespace AdmonisTest
 {
     public class AdmonisProductMapper
     {
+        private readonly ILogHelper logHelper;
+        public AdmonisProductMapper(ILogHelper logHelper)
+        {
+            this.logHelper = logHelper;
+        }
         /// <summary>
         /// Convert product data with child elements(options) from XML element to AdmonisProduct class 
         /// </summary>
@@ -36,7 +42,7 @@ namespace AdmonisTest
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Cannot convert product {productMakat}");
+                logHelper.LogMessage($"Cannot convert product {productMakat}");
                 throw;
             }
 
@@ -64,13 +70,13 @@ namespace AdmonisTest
                 }
                 else
                 {
-                    Console.WriteLine($"Custom attributes for product option {optionMakat} not found");
+                    logHelper.LogMessage($"Custom attributes for product option {optionMakat} not found");
                 }
                 return productOption;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Cannot convert product option {optionMakat}");
+                logHelper.LogMessage($"Cannot convert product option {optionMakat}");
                 throw;
             }
 
@@ -97,7 +103,7 @@ namespace AdmonisTest
                 }
                 else
                 {
-                    Console.WriteLine($"Cannot find details for option {optionId}");
+                    logHelper.LogMessage($"Cannot find details for option {optionId}");
                 }
             }
         }

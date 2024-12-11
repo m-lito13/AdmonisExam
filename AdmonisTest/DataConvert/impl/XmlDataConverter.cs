@@ -1,4 +1,5 @@
 ﻿using AdmonisTest.Admonis;
+using AdmonisTest.LogHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,11 @@ namespace AdmonisTest.impl
     public class XmlDataConverter : IInputDataConverter
     {
         private readonly AdmonisProductMapper mapper;
-        public XmlDataConverter(AdmonisProductMapper mapper)
+        private readonly ILogHelper logHelper;
+        public XmlDataConverter(AdmonisProductMapper mapper, ILogHelper logHelper)
         {
             this.mapper = mapper;
+            this.logHelper = logHelper;
         }
 
         /// <summary>
@@ -30,7 +33,7 @@ namespace AdmonisTest.impl
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Cannot convert : {ex.Message}");
+                logHelper.LogMessage($"Cannot convert : {ex.Message}");
                 return new List<AdmonisProduct>();
             }
 
