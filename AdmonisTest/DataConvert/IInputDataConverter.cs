@@ -5,6 +5,6 @@ namespace AdmonisTest
 {
     public interface IInputDataConverter
     {
-        IList<AdmonisProduct> ConvertProductsData(string dataPath);
+        IEnumerable<AdmonisProduct> ConvertProductsData(string dataPath);
     }
 }
