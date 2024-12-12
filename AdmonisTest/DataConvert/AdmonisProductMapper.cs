@@ -32,7 +32,7 @@ namespace AdmonisTest
 
                 product.Brand = xElem.Element(XName.Get(XmlConstants.Brand, nameSpace))?.Value;
                 product.Name = xElem.Element(XName.Get(XmlConstants.DisplayName, nameSpace))?.Value;
-                product.VideoLink = xElem.Element(XName.Get(XmlConstants.F54ProductVideo, nameSpace))?.Value;
+                product.VideoLink = GetVideoLinkForProduct(xElem);
                 product.DescriptionLong = xElem.Element(XName.Get(XmlConstants.LongDescription, nameSpace))?.Value;
                 product.Description = xElem.Element(XName.Get(XmlConstants.ShortDescription, nameSpace))?.Value;
 
@@ -122,6 +122,21 @@ namespace AdmonisTest
             resultOption.optionSugName1Title = DefaultValues.OptionSugName1TitleDefault;
             resultOption.optionSugName2Title = DefaultValues.OptionSugName2TitleDefault;
             return resultOption;
+        }
+
+        private string GetVideoLinkForProduct(XElement xElem)
+        {
+            string result = string.Empty;
+            string nameSpace = xElem.Name.NamespaceName;
+            XElement customAttributesElem = xElem.Element(XName.Get(XmlConstants.CustomAttributes, nameSpace));
+            if (customAttributesElem != null)
+            {
+                XElement videoLinkAttr = customAttributesElem
+                    .Elements()
+                    .Where(elem => elem.Attribute(XmlConstants.AttrinuteId).Value == XmlConstants.F54ProductVideo).FirstOrDefault();
+                result = videoLinkAttr?.Value;
+            }
+            return result;
         }
 
         private void FillProductOptionFromCustomAttributes(AdmonisProductOption productOption, XElement xElem)
