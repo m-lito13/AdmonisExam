@@ -7,7 +7,7 @@ Application for converting products data stored in XML file into list of Admonis
 
 ## Running Locally
 
-Before running , it should be validated that  <running folder> contains : 
+Before running , it should be validated that  <running_folder> contains : 
 
 1. File ```AdmonisTest.exe```
 
