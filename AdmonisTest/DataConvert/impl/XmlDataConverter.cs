@@ -23,7 +23,7 @@ namespace AdmonisTest.impl
         /// </summary>
         /// <param name="dataPath">path of file</param>
         /// <returns></returns>
-        public IList<AdmonisProduct> ConvertProductsData(string dataPath)
+        public IEnumerable<AdmonisProduct> ConvertProductsData(string dataPath)
         {
             try
             {
